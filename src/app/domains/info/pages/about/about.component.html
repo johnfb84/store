@@ -1,8 +1,11 @@
-<p>
-    <input type="number" [value]="duration()" (change)="changeDuration($event)">
-</p>
-<p>
-    <input type="text" [value]="message()" (change)="changeMessage($event)">
-</p>
-
-<app-counter ngSkipHydration [duration]="duration()" [message]="message()" *ngIf="duration() > 0" />
+<div class="px-10">
+    <h1 class="text-lg font-bold">About</h1>
+    <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Consequatur velit ducimus quis optio hic facere quasi,
+        corrupti officia maxime consequuntur a quas, quo mollitia consectetur omnis, delectus qui natus. Porro.</p>
+    <div class="text-sm">
+        <app-wave-audio audioUrl="assets/audio.mp3" />
+    </div>
+</div>
+@if (duration() > 0) {
+<app-counter [duration]="duration()" [message]="message()" />
+}

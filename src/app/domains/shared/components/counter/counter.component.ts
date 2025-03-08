@@ -1,4 +1,5 @@
-import { Component, Input, SimpleChanges } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import { Component, Inject, Input, PLATFORM_ID, signal, SimpleChanges } from '@angular/core';
 
 @Component({
   selector: 'app-counter',
@@ -7,10 +8,12 @@ import { Component, Input, SimpleChanges } from '@angular/core';
   styleUrl: './counter.component.css'
 })
 export class CounterComponent {
-  @Input({required:true}) duration = 0
-  @Input({required: true}) message = ''
+  @Input({ required: true }) duration = 0
+  @Input({ required: true }) message = ''
+  counter = signal(0)
+  counterReference: number | undefined
 
-  constructor(){
+  constructor(@Inject(PLATFORM_ID) private platformId: Object) {
     //Not async
     // before render
     console.log('constructor')
@@ -24,6 +27,10 @@ export class CounterComponent {
     console.log('ngOnChanges')
     console.log('-'.repeat(10))
     console.log(changes)
+    const duration = changes['duration']
+    if (duration && duration.currentValue !== duration.previousValue) {
+      this.doSomething()
+    }
   }
 
   ngOnInit() {
@@ -34,6 +41,13 @@ export class CounterComponent {
     console.log('-'.repeat(10))
     console.log('duration -> ', this.duration)
     console.log('message -> ', this.message)
+    if (isPlatformBrowser(this.platformId)) {
+
+      this.counterReference = window.setInterval(() => {
+        console.log('run interval')
+        this.counter.update(statePrev => statePrev + 1)
+      }, 1000)
+    }
   }
 
   ngAfterViewInit() {
@@ -49,6 +63,15 @@ export class CounterComponent {
     //Add 'implements OnDestroy' to the class.
     console.log('ngOnDestroy')
     console.log('-'.repeat(10))
+
+    if (this.counterReference && isPlatformBrowser(this.platformId)) {
+      window.clearInterval(this.counterReference)
+    }
+
+  }
+
+  doSomething() {
+    console.log('change duration')
   }
 
 }
