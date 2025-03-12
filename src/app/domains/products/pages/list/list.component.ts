@@ -5,6 +5,7 @@ import { Product } from '../../../shared/models/product.model';
 import { CommonModule } from '@angular/common';
 import { HeaderComponent } from "../../../shared/components/header/header.component";
 import { CartService } from '../../../shared/services/cart.service';
+import { ProductService } from '../../../shared/services/product.service';
 
 @Component({
   selector: 'app-list',
@@ -16,39 +17,18 @@ export class ListComponent {
 
   products = signal<Product[]>([])
   private cartService = inject(CartService)
+  private productService = inject(ProductService)
 
-  constructor() {
-    const initProducts: Product[] = [
-      {
-        id: Date.now(),
-        title: 'Producto 1',
-        price: 400,
-        image: 'https://picsum.photos/640/640?r=23',
-        createdOn: new Date().toISOString()
-      },
-      {
-        id: Date.now(),
-        title: 'Producto 2',
-        price: 500,
-        image: 'https://picsum.photos/640/640?r=233',
-        createdOn: new Date().toISOString()
-      },
-      {
-        id: Date.now(),
-        title: 'Producto 3',
-        price: 400,
-        image: 'https://picsum.photos/640/640?r=238',
-        createdOn: new Date().toISOString()
-      },
-      {
-        id: Date.now(),
-        title: 'Producto 4',
-        price: 500,
-        image: 'https://picsum.photos/640/640?r=239',
-        createdOn: new Date().toISOString()
-      },
-    ]
-    this.products.set(initProducts)
+  ngOnInit(): void {
+    this.productService.getProducts()
+      .subscribe({
+        next: (product) => {
+          this.products.set(product)
+        },
+        error: () => {
+
+        }
+      })
   }
 
   addProductToCart(product: Product) {
