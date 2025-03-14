@@ -3,13 +3,12 @@ import { Component, inject, signal } from '@angular/core';
 import { ProductComponent } from '@products/components/product/product.component'
 import { Product } from '@shared/models/product.model';
 import { CommonModule } from '@angular/common';
-import { HeaderComponent } from "@shared/components/header/header.component";
 import { CartService } from '@shared/services/cart.service';
 import { ProductService } from '@shared/services/product.service';
 
 @Component({
   selector: 'app-list',
-  imports: [ProductComponent, CommonModule, HeaderComponent],
+  imports: [ProductComponent, CommonModule],
   templateUrl: './list.component.html',
   styleUrl: './list.component.css'
 })
