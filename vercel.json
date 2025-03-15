@@ -1,3 +1,0 @@
-{
-    "buildCommand": "ng build && npx esbuild --bundle dist/main.js --external:zone.js"
-}
